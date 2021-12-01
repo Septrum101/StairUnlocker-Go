@@ -1,0 +1,5 @@
+converterAPI: https://api.dler.io
+subURL:
+localFile: true
+token:
+maxConn: 32
