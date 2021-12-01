@@ -33,7 +33,7 @@ None                    未解锁
 
 ## 使用说明
 
-1. 配置文件说明
+1. config.yaml 配置文件说明
 
 ~~~~yaml
 #subconverter 服务器地址
