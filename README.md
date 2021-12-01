@@ -1,8 +1,8 @@
 ## 注意事项
 
+- 本项目使用 [Golang](https://go.dev/) 编写
 - 对比之前 [python](https://github.com/thank243/StairUnlocker) 版效率极大提升，实测200+节点只需要5秒完成检测
 - 测速及解锁测试仅供参考，不代表实际使用情况，由于网络情况变化、Netflix封锁及ip更换，测速具有时效性
-- 本项目使用 [Golang](https://go.dev/) 编写
 - Netflix 解锁测速结果说明:
 
 ~~~~text
