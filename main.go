@@ -17,18 +17,21 @@ import (
 var (
 	proxiesList []C.Proxy
 	netflixCfg  config.RawConfig
+	su          *config.SuConfig
 	ver         bool
 	help        bool
-	su          *config.SuConfig
 	daemon      bool
+	configFile  string
 )
 
 func init() {
-	su = config.Init()
 	flag.BoolVar(&help, "h", false, "this help")
 	flag.BoolVar(&ver, "v", false, "show current ver of StairUnlock")
 	flag.BoolVar(&daemon, "D", false, "Daemon mode")
-	flag.StringVar(&su.SubURL, "u", su.SubURL, "Load config from subscription url")
+	flag.StringVar(&configFile, "f", "", "specify configuration file")
+	flag.Parse()
+	su = config.Init(&configFile)
+	flag.StringVar(&su.SubURL, "u", su.SubURL, "Load node from subscription url")
 	flag.StringVar(&su.Token, "t", su.Token, "The github token")
 	flag.StringVar(&su.GistUrl, "g", su.GistUrl, "The gist api URL")
 	flag.Parse()
@@ -44,7 +47,7 @@ func init() {
 		fmt.Println("Daemon mode: on")
 		fmt.Printf("Check internal: %ds\n", su.Internal)
 	} else {
-		fmt.Println("Gist mode: off")
+		fmt.Println("Daemon mode: off")
 	}
 
 }
@@ -86,6 +89,7 @@ func main() {
 		flag.PrintDefaults()
 		return
 	}
+	run()
 	if daemon {
 		for {
 			resp, _ := http.Get("https://www.netflix.com/title/70143836")
@@ -100,8 +104,6 @@ func main() {
 				log.Infoln("Stream Media is unlocking.")
 			}
 			time.Sleep(time.Duration(su.Internal) * time.Second)
-
 		}
 	}
-	run()
 }

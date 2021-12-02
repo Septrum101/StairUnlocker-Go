@@ -30,16 +30,21 @@ type SuConfig struct {
 	LogLevel     log.LogLevel `yaml:"log_level"`
 }
 
-func Init() (s *SuConfig) {
+func Init(cfgPath *string) (s *SuConfig) {
 	//initial config.yaml
-	_, err := os.Stat("config.yaml")
-	if err != nil {
-		b, _ := ioutil.ReadFile("config.example.yaml")
-		_ = ioutil.WriteFile("config.yaml", b, 644)
+	var buf []byte
+	if *cfgPath != "" {
+		buf, _ = ioutil.ReadFile(*cfgPath)
+	} else {
+		_, err := os.Stat("config.yaml")
+		if err != nil {
+			b, _ := ioutil.ReadFile("config.example.yaml")
+			_ = ioutil.WriteFile("config.yaml", b, 644)
+		}
+		buf, _ = ioutil.ReadFile("config.yaml")
 	}
-	b, _ := ioutil.ReadFile("config.yaml")
 	var cfg SuConfig
-	err = yaml.Unmarshal(b, &cfg)
+	_ = yaml.Unmarshal(buf, &cfg)
 	return &cfg
 }
 

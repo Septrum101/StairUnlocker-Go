@@ -86,6 +86,50 @@ optional arguments:
 
 ~~~~
 
-### 使用actions自动更新
+### 使用 systemd 添加系统服务
 
-待定
+StairUnlcoker-Go 可以使用 systemd 在后台运行，以保证当节点不能解锁流媒体时可以重新检测节点并更新 gist
+
+1. 将 StairUnlcoker-Go 的二进制文件拷贝到 `/usr/local/bin/StairUnlocker`:
+
+~~~~bash
+# mkdir /usr/local/bin/StairUnlocker/
+# cp StairUnlocker-Go /usr/local/bin/
+# mkdir /etc/StairUnlocker/
+# cp config.yaml /etc/StairUnlocker/
+~~~~
+
+2. 在 `/etc/systemd/system/stairunlocker.service` 建立 systemd 配置文件:
+
+~~~~systemd
+[Unit]
+Description=StairUnlcoker-Go daemon, A fast stream media test tool in Go.
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/local/bin/StairUnlocker-Go -D -f /etc/StairUnlocker/config.yaml
+
+[Install]
+WantedBy=multi-user.target
+~~~~
+
+3. 设置系统启动项
+
+~~~~bash
+# systemctl enable stairunlocker
+~~~~
+
+4. 立即启动 StairUnlcoker-Go:
+
+~~~~bash
+# systemctl start stairunlocker
+~~~~
+
+5. 检查运行状态和日志:
+
+~~~~bash
+# systemctl status stairunlocker
+# journalctl -u stairunlocker -f
+~~~~
