@@ -20,13 +20,14 @@ type RawConfig struct {
 }
 
 type SuConfig struct {
-	ConverterAPI string `yaml:"converterAPI"`
-	SubURL       string `yaml:"subURL"`
-	LocalFile    bool   `yaml:"localFile"`
-	Token        string `yaml:"token"`
-	MaxConn      int    `yaml:"maxConn"`
-	GistUrl      string `yaml:"gistUrl,omitempty"`
-	Internal     int    `yaml:"internal"`
+	ConverterAPI string       `yaml:"converterAPI"`
+	SubURL       string       `yaml:"subURL"`
+	LocalFile    bool         `yaml:"localFile"`
+	Token        string       `yaml:"token"`
+	MaxConn      int          `yaml:"maxConn"`
+	GistUrl      string       `yaml:"gistUrl,omitempty"`
+	Internal     int          `yaml:"internal"`
+	LogLevel     log.LogLevel `yaml:"log_level"`
 }
 
 func Init() (s *SuConfig) {

@@ -33,6 +33,8 @@ func init() {
 	flag.StringVar(&su.GistUrl, "g", su.GistUrl, "The gist api URL")
 	flag.Parse()
 	fmt.Printf("StairUnlock-Go %s %s %s with %s\n", utils.Version, runtime.GOOS, runtime.GOARCH, runtime.Version())
+	log.SetLevel(su.LogLevel)
+	fmt.Printf("Log Level: %s\n", su.LogLevel)
 	if su.LocalFile {
 		fmt.Println("Local file mode: on")
 	} else {

@@ -1,3 +1,4 @@
+log_level: error
 converterAPI: https://api.dler.io
 subURL:
 localFile: true
