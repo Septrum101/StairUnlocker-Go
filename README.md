@@ -34,16 +34,25 @@ None                    未解锁
 1. config.yaml 配置文件说明
 
 ~~~~yaml
+# info / warning / error / debug / silent
+log-level: info
+
 # subconverter 服务器地址
 converterAPI: https://api.dler.io
+
 # 订阅地址
 subURL:
-# true 使用本地proxies.yaml文件，导出结果到netflix.yaml， false上传到gist
+
+# true：使用本地proxies.yaml文件，导出结果到netflix.yaml
+# false：上传到gist
 localFile: true
+
 # github token, localFile 为 true 时设置
 token:
+
 # 最大同时测试数
 maxConn: 32
+
 # Daemon mode 检测周期
 internal: 3600
 ~~~~
