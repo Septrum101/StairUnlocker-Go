@@ -1,0 +1,7 @@
+log_level: error
+converterAPI: https://api.dler.io
+subURL:
+localFile: false
+token:
+maxConn: 32
+internal: 3600
