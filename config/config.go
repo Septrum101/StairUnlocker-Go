@@ -12,6 +12,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type RawConfig struct {
@@ -25,6 +26,7 @@ type SuConfig struct {
 	Token        string `yaml:"token"`
 	MaxConn      int    `yaml:"maxConn"`
 	GistUrl      string `yaml:"gistUrl,omitempty"`
+	Internal     int    `yaml:"internal"`
 }
 
 func Init() (s *SuConfig) {
@@ -114,5 +116,9 @@ func convertAPI(sCfg *SuConfig) (p []byte) {
 		}
 	}(reqs.Body)
 	p, _ = ioutil.ReadAll(reqs.Body)
+	if strings.Contains(string(p), "The following link doesn't contain any valid node info") {
+		log.Errorln("The following link doesn't contain any valid node info.")
+		panic("Invalid link.")
+	}
 	return
 }

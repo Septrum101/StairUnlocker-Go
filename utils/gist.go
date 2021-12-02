@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/Dreamacro/clash/log"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -33,7 +33,7 @@ func (ths *gistCtx) upload() (*http.Response, error) {
 func (ths *gistCtx) create() {
 	b, _ := ioutil.ReadAll(ths.body)
 	var url map[string]string
-	_ = yaml.Unmarshal(b, &url)
+	_ = json.Unmarshal(b, &url)
 	ths.cfg.GistUrl = url["url"]
 	tmp, _ := yaml.Marshal(ths.cfg)
 	_ = ioutil.WriteFile("config.yaml", tmp, 0644)
@@ -57,6 +57,11 @@ func Gist(data []byte, cfg *config.SuConfig) (err error) {
 		ctx.body = reqs.Body
 		ctx.create()
 		log.Errorln("The gist is not exist! A new gist will be created.")
+	} else {
+		b, _ := ioutil.ReadAll(reqs.Body)
+		var msg map[string]string
+		_ = json.Unmarshal(b, &msg)
+		log.Errorln(msg["message"])
 	}
 	return
 }

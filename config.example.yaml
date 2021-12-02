@@ -3,3 +3,4 @@ subURL:
 localFile: true
 token:
 maxConn: 32
+internal: 3600

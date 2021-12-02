@@ -7,8 +7,9 @@ import (
 	"fmt"
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/log"
-	"gopkg.in/yaml.v3"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
+	"net/http"
 	"runtime"
 	"time"
 )
@@ -19,12 +20,14 @@ var (
 	version     bool
 	help        bool
 	su          *config.SuConfig
+	daemon      bool
 )
 
 func init() {
 	su = config.Init()
 	flag.BoolVar(&help, "h", false, "this help")
 	flag.BoolVar(&version, "v", false, "show current version of StairUnlock")
+	flag.BoolVar(&daemon, "D", false, "Daemon mode")
 	flag.StringVar(&su.SubURL, "u", su.SubURL, "Load config from subscription url")
 	flag.StringVar(&su.Token, "t", su.Token, "The github token")
 	flag.StringVar(&su.GistUrl, "g", su.GistUrl, "The gist api URL")
@@ -35,25 +38,20 @@ func init() {
 	} else {
 		fmt.Println("Gist mode: on")
 	}
+	if daemon {
+		fmt.Println("Daemon mode: on")
+		fmt.Printf("Check internal: %ds\n", su.Internal)
+	} else {
+		fmt.Println("Gist mode: off")
+	}
+
 }
 
-func main() {
-	//command-line
-	if version {
-		fmt.Printf("StairUnlock %s %s %s with %s\n", utils.Version, runtime.GOOS, runtime.GOARCH, runtime.Version())
-		return
-	}
-	if help {
-		fmt.Printf("StairUnlock %s %s %s with %s\n", utils.Version, runtime.GOOS, runtime.GOARCH, runtime.Version())
-		flag.PrintDefaults()
-		return
-	}
-
+func run() {
 	proxies, cfg, _ := config.GenerateProxies(su)
 	for _, v := range proxies {
 		proxiesList = append(proxiesList, v)
 	}
-
 	//同时连接数
 	connNum := su.MaxConn
 	if i := len(proxiesList); i < connNum {
@@ -74,4 +72,34 @@ func main() {
 			return
 		}
 	}
+}
+func main() {
+	//command-line
+	if version {
+		fmt.Printf("StairUnlock %s %s %s with %s\n", utils.Version, runtime.GOOS, runtime.GOARCH, runtime.Version())
+		return
+	}
+	if help {
+		fmt.Printf("StairUnlock %s %s %s with %s\n", utils.Version, runtime.GOOS, runtime.GOARCH, runtime.Version())
+		flag.PrintDefaults()
+		return
+	}
+	if daemon {
+		for {
+			resp, _ := http.Get("https://www.netflix.com/title/70143836")
+			err := resp.Body.Close()
+			if err != nil {
+				return
+			}
+			if resp.StatusCode != 200 {
+				log.Errorln("Cannot access NETFLIX, Retesting all nodes.")
+				run()
+			} else {
+				log.Infoln("Stream Media is unlocking.")
+			}
+			time.Sleep(time.Duration(su.Internal) * time.Second)
+
+		}
+	}
+	run()
 }
