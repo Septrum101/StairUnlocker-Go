@@ -49,7 +49,6 @@ func init() {
 	} else {
 		fmt.Println("Daemon mode: off")
 	}
-
 }
 
 func run() {
@@ -64,7 +63,7 @@ func run() {
 	}
 	start := time.Now()
 	netflixList := utils.BatchCheck(proxiesList, connNum)
-	log.Warnln("Completed! Elapsed time: %s", time.Now().Sub(start).String())
+	log.Warnln("Total %d nodes test completed, %d unlock nodes, Elapsed time: %s", len(proxiesList), len(netflixList), time.Now().Sub(start).String())
 
 	netflixCfg = config.NETFLIXFilter(netflixList, cfg)
 	marshal, _ := yaml.Marshal(netflixCfg)
