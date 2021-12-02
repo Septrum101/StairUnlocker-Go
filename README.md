@@ -45,7 +45,7 @@ subURL:
 
 # true：使用本地proxies.yaml文件，导出结果到netflix.yaml
 # false：上传到gist
-localFile: true
+localFile: false
 
 # github token, localFile 为 true 时设置
 token:

@@ -45,6 +45,7 @@ func Init() (s *SuConfig) {
 
 func readConfig(path string) ([]byte, error) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
+		_ = ioutil.WriteFile("proxies.yaml", nil, 0644)
 		return nil, err
 	}
 	data, err := os.ReadFile(path)
@@ -88,7 +89,10 @@ func GenerateProxies(sCfg *SuConfig) (proxies map[string]C.Proxy, cfg *RawConfig
 		configFile := "proxies.yaml"
 		currentDir, _ := os.Getwd()
 		configFile = filepath.Join(currentDir, configFile)
-		data, _ = readConfig(configFile)
+		data, err = readConfig(configFile)
+		if err != nil {
+			panic(err.Error())
+		}
 	} else {
 		log.Infoln("Converting from API server.")
 		data = convertAPI(sCfg)
