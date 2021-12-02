@@ -17,7 +17,7 @@ import (
 var (
 	proxiesList []C.Proxy
 	netflixCfg  config.RawConfig
-	version     bool
+	ver         bool
 	help        bool
 	su          *config.SuConfig
 	daemon      bool
@@ -26,7 +26,7 @@ var (
 func init() {
 	su = config.Init()
 	flag.BoolVar(&help, "h", false, "this help")
-	flag.BoolVar(&version, "v", false, "show current version of StairUnlock")
+	flag.BoolVar(&ver, "v", false, "show current ver of StairUnlock")
 	flag.BoolVar(&daemon, "D", false, "Daemon mode")
 	flag.StringVar(&su.SubURL, "u", su.SubURL, "Load config from subscription url")
 	flag.StringVar(&su.Token, "t", su.Token, "The github token")
@@ -77,7 +77,7 @@ func run() {
 }
 func main() {
 	//command-line
-	if version {
+	if ver {
 		fmt.Printf("StairUnlock %s %s %s with %s\n", utils.Version, runtime.GOOS, runtime.GOARCH, runtime.Version())
 		return
 	}
