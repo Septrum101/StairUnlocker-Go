@@ -103,3 +103,5 @@ config.yaml
 
 dist/
 .goreleaser.yml
+StairUnlocker-Go
+/utils/telegrambot.go

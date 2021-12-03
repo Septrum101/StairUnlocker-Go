@@ -16,7 +16,6 @@ import (
 
 var (
 	proxiesList []C.Proxy
-	netflixCfg  config.RawConfig
 	su          *config.SuConfig
 	ver         bool
 	help        bool
@@ -64,9 +63,8 @@ func run() {
 	start := time.Now()
 	netflixList := utils.BatchCheck(proxiesList, connNum)
 	log.Warnln("Total %d nodes test completed, %d unlock nodes, Elapsed time: %s", len(proxiesList), len(netflixList), time.Now().Sub(start).String())
+	marshal, _ := yaml.Marshal(config.NETFLIXFilter(netflixList, cfg))
 
-	netflixCfg = config.NETFLIXFilter(netflixList, cfg)
-	marshal, _ := yaml.Marshal(netflixCfg)
 	if su.LocalFile {
 		_ = ioutil.WriteFile("netflix.yaml", marshal, 0644)
 		log.Infoln("Written to netflix.yaml.")
@@ -77,6 +75,7 @@ func run() {
 		}
 	}
 }
+
 func main() {
 	//command-line
 	if ver {
@@ -89,6 +88,7 @@ func main() {
 		return
 	}
 	run()
+
 	if daemon {
 		for {
 			resp, _ := http.Get("https://www.netflix.com/title/70143836")
@@ -98,6 +98,8 @@ func main() {
 			}
 			if resp.StatusCode != 200 {
 				log.Errorln("Cannot access NETFLIX, Retesting all nodes.")
+				// 清空 proxiesList 切片
+				proxiesList = proxiesList[:0]
 				run()
 			} else {
 				log.Infoln("Stream Media is unlocking.")
