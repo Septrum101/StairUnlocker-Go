@@ -90,6 +90,7 @@ func main() {
 	run()
 
 	if daemon {
+		start := time.Now()
 		for {
 			resp, _ := http.Get("https://www.netflix.com/title/70143836")
 			err := resp.Body.Close()
@@ -103,6 +104,12 @@ func main() {
 				run()
 			} else {
 				log.Infoln("Stream Media is unlocking.")
+				if time.Now().Sub(start) > 3*time.Hour {
+					// 每3小时强制更新
+					start = time.Now()
+					proxiesList = proxiesList[:0]
+					run()
+				}
 			}
 			time.Sleep(time.Duration(su.Internal) * time.Second)
 		}
