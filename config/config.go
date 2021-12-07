@@ -20,14 +20,21 @@ type RawConfig struct {
 }
 
 type SuConfig struct {
-	ConverterAPI string       `yaml:"converterAPI"`
-	SubURL       string       `yaml:"subURL"`
-	LocalFile    bool         `yaml:"localFile"`
-	Token        string       `yaml:"token"`
-	MaxConn      int          `yaml:"maxConn"`
-	GistUrl      string       `yaml:"gistUrl,omitempty"`
-	Internal     int          `yaml:"internal"`
-	LogLevel     log.LogLevel `yaml:"log_level"`
+	ConverterAPI   string       `yaml:"converterAPI"`
+	SubURL         string       `yaml:"subURL"`
+	LocalFile      bool         `yaml:"localFile"`
+	Token          string       `yaml:"token"`
+	MaxConn        int          `yaml:"maxConn"`
+	GistUrl        string       `yaml:"gistUrl,omitempty"`
+	Internal       int          `yaml:"internal"`
+	LogLevel       log.LogLevel `yaml:"log_level"`
+	EnableTelegram bool         `yaml:"enableTelegram"`
+	Telegram       *telegram
+}
+type telegram struct {
+	TelegramToken string `yaml:"telegramToken,omitempty"`
+	ChatID        int64  `yaml:"chatID,omitempty"`
+	Secret        string `yaml:"secret,omitempty"`
 }
 
 func Init(cfgPath *string) (s *SuConfig) {

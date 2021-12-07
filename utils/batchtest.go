@@ -26,12 +26,12 @@ func BatchCheck(proxiesList []C.Proxy, n int) (NETFLIXList []string) {
 			} else if sCode == 200 {
 				ch <- 1
 				curr += <-ch
-				log.Infoln("(%d/%d) %s : latency = %v ms | Full Unlock", curr, total, p.Name(), latency)
+				log.Debugln("(%d/%d) %s : latency = %v ms | Full Unlock", curr, total, p.Name(), latency)
 				NETFLIXList = append(NETFLIXList, p.Name())
 			} else {
 				ch <- 1
 				curr += <-ch
-				log.Infoln("(%d/%d) %s : latency = %v ms | None", curr, total, p.Name(), latency)
+				log.Debugln("(%d/%d) %s : latency = %v ms | None", curr, total, p.Name(), latency)
 			}
 			return nil, nil
 		})
