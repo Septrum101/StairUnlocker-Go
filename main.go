@@ -37,25 +37,7 @@ func init() {
 	flag.StringVar(&su.Token, "t", su.Token, "The github token")
 	flag.StringVar(&su.GistUrl, "g", su.GistUrl, "The gist api URL")
 	flag.Parse()
-	fmt.Printf("StairUnlock-Go %s %s %s with %s\n", utils.Version, runtime.GOOS, runtime.GOARCH, runtime.Version())
-	log.SetLevel(su.LogLevel)
-	fmt.Printf("Log Level: %s\n", su.LogLevel)
-	if su.LocalFile {
-		fmt.Println("Local file mode: on")
-	} else {
-		fmt.Println("Gist mode: on")
-	}
-	if daemon {
-		fmt.Println("Daemon mode: on")
-		fmt.Printf("Check internal: %ds\n", su.Internal)
-		// 初始化telegramBot
-		if su.EnableTelegram {
-			fmt.Println("Telegram Bot: on")
-			tg.NewBot(su)
-		}
-	} else {
-		fmt.Println("Daemon mode: off")
-	}
+
 }
 
 func run() {
@@ -129,6 +111,25 @@ func main() {
 		fmt.Printf("StairUnlock %s %s %s with %s\n", utils.Version, runtime.GOOS, runtime.GOARCH, runtime.Version())
 		flag.PrintDefaults()
 		return
+	}
+	fmt.Printf("StairUnlock-Go %s %s %s with %s\n", utils.Version, runtime.GOOS, runtime.GOARCH, runtime.Version())
+	log.SetLevel(su.LogLevel)
+	fmt.Printf("Log Level: %s\n", su.LogLevel)
+	if su.LocalFile {
+		fmt.Println("Local file mode: on")
+	} else {
+		fmt.Println("Gist mode: on")
+	}
+	if daemon {
+		fmt.Println("Daemon mode: on")
+		fmt.Printf("Check internal: %ds\n", su.Internal)
+		// 初始化telegramBot
+		if su.EnableTelegram {
+			fmt.Println("Telegram Bot: on")
+			tg.NewBot(su)
+		}
+	} else {
+		fmt.Println("Daemon mode: off")
 	}
 	run()
 
