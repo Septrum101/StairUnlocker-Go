@@ -7,7 +7,7 @@ import (
 	"fmt"
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/log"
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	tgBot "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"net/http"
@@ -56,7 +56,7 @@ func run() {
 	if daemon && su.EnableTelegram {
 		telegramReport := fmt.Sprintf("%s, Timestamp: %s", report, time.Now().Format("2006/01/02 15:04:05.000"))
 		tg.SendMessage = telegramReport
-		_, _ = tg.Bot.Send(tgbotapi.NewMessage(su.Telegram.ChatID, telegramReport))
+		_, _ = tg.Bot.Send(tgBot.NewMessage(su.Telegram.ChatID, telegramReport))
 	}
 
 	marshal, _ := yaml.Marshal(config.NETFLIXFilter(netflixList, cfg))
@@ -101,17 +101,18 @@ func daemonRun() {
 }
 
 func main() {
+	versionStr := fmt.Sprintf("StairUnlock %s %s %s with %s %s\n", C.Version, runtime.GOOS, runtime.GOARCH, runtime.Version(), C.BuildTime)
 	//command-line
 	if ver {
-		fmt.Printf("StairUnlock %s %s %s with %s\n", utils.Version, runtime.GOOS, runtime.GOARCH, runtime.Version())
+		fmt.Printf(versionStr)
 		return
 	}
 	if help {
-		fmt.Printf("StairUnlock %s %s %s with %s\n", utils.Version, runtime.GOOS, runtime.GOARCH, runtime.Version())
+		fmt.Printf(versionStr)
 		flag.PrintDefaults()
 		return
 	}
-	fmt.Printf("StairUnlock-Go %s %s %s with %s\n", utils.Version, runtime.GOOS, runtime.GOARCH, runtime.Version())
+	fmt.Printf(versionStr)
 	log.SetLevel(su.LogLevel)
 	fmt.Printf("Log Level: %s\n", su.LogLevel)
 	if su.LocalFile {
