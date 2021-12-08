@@ -27,6 +27,7 @@ func (tb *TgBot) NewBot(cfg *config.SuConfig) {
 	log.Infoln("Authorized on account %s", bot.Self.UserName)
 }
 
+
 func (tb *TgBot) TelegramUpdates(buf *chan bool) {
 	bot := tb.Bot
 	u := tg.NewUpdate(0)
