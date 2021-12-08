@@ -5,3 +5,7 @@ localFile: false
 token:
 maxConn: 32
 internal: 3600
+enableTelegram: false
+telegram:
+  telegramToken:
+  chatID:
