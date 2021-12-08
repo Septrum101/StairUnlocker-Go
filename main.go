@@ -37,7 +37,6 @@ func init() {
 	flag.StringVar(&su.Token, "t", su.Token, "The github token")
 	flag.StringVar(&su.GistUrl, "g", su.GistUrl, "The gist api URL")
 	flag.Parse()
-
 }
 
 func run() {
@@ -121,6 +120,7 @@ func main() {
 	} else {
 		fmt.Println("Gist mode: on")
 	}
+	// 初始化信息
 	if daemon {
 		fmt.Println("Daemon mode: on")
 		fmt.Printf("Check internal: %ds\n", su.Internal)
