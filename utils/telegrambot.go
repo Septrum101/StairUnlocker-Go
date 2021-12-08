@@ -27,7 +27,7 @@ func (tb *TgBot) NewBot(cfg *config.SuConfig) {
 	log.Infoln("Authorized on account %s", bot.Self.UserName)
 }
 
-func (tb *TgBot) TelegramUpdates() {
+func (tb *TgBot) TelegramUpdates(buf *chan bool) {
 	bot := tb.Bot
 	u := tg.NewUpdate(0)
 	u.Timeout = 60
@@ -35,6 +35,7 @@ func (tb *TgBot) TelegramUpdates() {
 	updates := bot.GetUpdatesChan(u)
 	for update := range updates {
 		if update.Message == nil {
+			println("test bot!!!")
 			continue
 		}
 		if update.Message.Chat.ID == Cfg.Telegram.ChatID {
@@ -42,9 +43,9 @@ func (tb *TgBot) TelegramUpdates() {
 			case "/start":
 				_, _ = bot.Send(tg.NewMessage(update.Message.Chat.ID, "/check Check all node.\n/stat Show last status."))
 			case "/check":
-				if tb.Check != true {
+				if len(*buf) == 0 {
 					_, _ = bot.Send(tg.NewMessage(update.Message.Chat.ID, "Checking all nodes..."))
-					tb.Check = true
+					*buf <- true
 				} else {
 					_, _ = bot.Send(tg.NewMessage(update.Message.Chat.ID, "Duplication, Checking all nodes..."))
 				}

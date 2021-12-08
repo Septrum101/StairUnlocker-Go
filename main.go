@@ -134,19 +134,21 @@ func main() {
 	run()
 
 	if daemon {
+		ch := make(chan bool, 1)
 		if su.EnableTelegram {
-			go func() { tg.TelegramUpdates() }()
+			go func() { tg.TelegramUpdates(&ch) }()
+		} else {
+			close(ch)
 		}
 		go func() { daemonRun() }()
-		for {
-			if tg.Check {
+		for check := range ch {
+			if check {
 				log.Infoln("Telegram: Force re-testing all nodes.")
 				start = time.Now()
 				proxiesList = proxiesList[:0]
 				run()
-				tg.Check = false
+				ch <- false
 			}
-			time.Sleep(1 * time.Second)
 		}
 	}
 }
