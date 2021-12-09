@@ -55,6 +55,14 @@ maxConn: 32
 
 # Daemon mode 检测周期
 internal: 3600
+
+# 启用telegramBot
+enableTelegram: false
+telegram:
+  # bot的token
+  telegramToken:
+  # telegram用户id
+  chatID:
 ~~~~
 
 2. 运行程序：
