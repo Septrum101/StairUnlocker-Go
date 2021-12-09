@@ -120,6 +120,7 @@ func main() {
 	} else {
 		fmt.Println("Gist mode: on")
 	}
+	// 初始化信息
 	if daemon {
 		fmt.Println("Daemon mode: on")
 		fmt.Printf("Check internal: %ds\n", su.Internal)
