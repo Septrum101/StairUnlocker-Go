@@ -82,7 +82,7 @@ telegram:
 4. 命令参数：
 
 ~~~~bash
-usage: main [-h] [-u SUBURL] [-t TOKEN] [-g GISTURL] [-D]
+usage: StairUnlocker-Go [-h] [-u SUBURL] [-t TOKEN] [-g GISTURL] [-D]
 
 optional arguments:
     -h    this help
