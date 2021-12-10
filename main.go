@@ -75,8 +75,11 @@ func run() {
 func daemonRun() {
 	start = time.Now()
 	for {
-		resp, _ := http.Get("https://www.netflix.com/title/70143836")
-		err := resp.Body.Close()
+		resp, err := http.Get("https://www.netflix.com/title/70143836")
+		if err != nil {
+			log.Errorln(err.Error())
+		}
+		err = resp.Body.Close()
 		if err != nil {
 			log.Errorln(err.Error())
 		}
@@ -88,8 +91,8 @@ func daemonRun() {
 			run()
 		} else {
 			log.Infoln("Stream Media is unlocking.")
-			if time.Now().Sub(start) > 12*time.Hour {
-				// 每12小时强制更新
+			// 每6小时强制更新
+			if time.Now().Sub(start) > 6*time.Hour {
 				log.Infoln("Force re-testing all nodes.")
 				start = time.Now()
 				proxiesList = proxiesList[:0]
@@ -148,16 +151,7 @@ func main() {
 				start = time.Now()
 				proxiesList = proxiesList[:0]
 				run()
-				// 清空channel
-			L:
-				for {
-					select {
-					case <-ch:
-					default:
-						break L
-					}
-				}
-				ch <- false
+				tg.Check = false
 			}
 		}
 	}
