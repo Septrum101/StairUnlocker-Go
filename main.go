@@ -148,16 +148,7 @@ func main() {
 				start = time.Now()
 				proxiesList = proxiesList[:0]
 				run()
-				// 清空channel
-			L:
-				for {
-					select {
-					case <-ch:
-					default:
-						break L
-					}
-				}
-				ch <- false
+				tg.Check = false
 			}
 		}
 	}

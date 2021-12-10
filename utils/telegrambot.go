@@ -42,9 +42,10 @@ func (tb *TgBot) TelegramUpdates(buf *chan bool) {
 			case "/start":
 				_, _ = bot.Send(tg.NewMessage(update.Message.Chat.ID, "/check Check all node.\n/stat Show last status."))
 			case "/check":
-				if len(*buf) == 0 {
-					_, _ = bot.Send(tg.NewMessage(update.Message.Chat.ID, "Checking all nodes..."))
+				if !tb.Check {
+					tb.Check = true
 					*buf <- true
+					_, _ = bot.Send(tg.NewMessage(update.Message.Chat.ID, "Checking all nodes..."))
 				} else {
 					_, _ = bot.Send(tg.NewMessage(update.Message.Chat.ID, "Duplication, Checking all nodes..."))
 				}
