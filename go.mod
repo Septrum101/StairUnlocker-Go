@@ -1,4 +1,4 @@
-module StairUnlocker-Go
+module github.com/thank243/StairUnlocker-Go
 
 go 1.17
 

@@ -1,9 +1,9 @@
 package utils
 
 import (
-	"StairUnlocker-Go/config"
 	"github.com/Dreamacro/clash/log"
 	tg "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/thank243/StairUnlocker-Go/config"
 )
 
 type TgBot struct {
