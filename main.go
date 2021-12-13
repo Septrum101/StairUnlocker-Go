@@ -1,13 +1,13 @@
 package main
 
 import (
-	"StairUnlocker-Go/config"
-	"StairUnlocker-Go/utils"
 	"flag"
 	"fmt"
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/log"
 	tgBot "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/thank243/StairUnlocker-Go/config"
+	"github.com/thank243/StairUnlocker-Go/utils"
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"net/http"

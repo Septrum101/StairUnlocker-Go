@@ -1,10 +1,10 @@
 package utils
 
 import (
-	"StairUnlocker-Go/config"
 	"bytes"
 	"encoding/json"
 	"github.com/Dreamacro/clash/log"
+	"github.com/thank243/StairUnlocker-Go/config"
 	"gopkg.in/yaml.v3"
 	"io"
 	"io/ioutil"
