@@ -37,7 +37,7 @@ func (tb *TgBot) TelegramUpdates(buf *chan bool) {
 		if update.Message == nil {
 			continue
 		}
-		if update.Message.Chat.ID == Cfg.Telegram.ChatID {
+		if update.Message.Chat.ID == Cfg.Telegram.ID {
 			switch update.Message.Text {
 			case "/start":
 				_, _ = bot.Send(tg.NewMessage(update.Message.Chat.ID, "/check Check all node.\n/stat Show last status."))

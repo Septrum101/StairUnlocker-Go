@@ -56,7 +56,7 @@ func run() {
 	if daemon && su.EnableTelegram {
 		telegramReport := fmt.Sprintf("%s, Timestamp: %s", report, time.Now().Round(time.Millisecond))
 		tg.SendMessage = telegramReport
-		_, _ = tg.Bot.Send(tgBot.NewMessage(su.Telegram.ChatID, telegramReport))
+		_, _ = tg.Bot.Send(tgBot.NewMessage(su.Telegram.ID, telegramReport))
 	}
 
 	marshal, _ := yaml.Marshal(config.NETFLIXFilter(netflixList, cfg))

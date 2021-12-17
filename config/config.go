@@ -33,7 +33,7 @@ type SuConfig struct {
 }
 type telegram struct {
 	TelegramToken string `yaml:"telegramToken,omitempty"`
-	ChatID        int64  `yaml:"chatID,omitempty"`
+	ID            int64  `yaml:"chatID,omitempty"`
 	Secret        string `yaml:"secret,omitempty"`
 }
 
