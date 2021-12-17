@@ -51,10 +51,10 @@ func run() {
 	}
 	start = time.Now()
 	netflixList := utils.BatchCheck(proxiesList, connNum)
-	report := fmt.Sprintf("Total %d nodes test completed, %d unlock nodes, Elapsed time: %s", len(proxiesList), len(netflixList), time.Now().Sub(start).String())
+	report := fmt.Sprintf("Total %d nodes test completed, %d unlock nodes, Elapsed time: %s", len(proxiesList), len(netflixList), time.Now().Sub(start).Round(time.Millisecond))
 	log.Warnln(report)
 	if daemon && su.EnableTelegram {
-		telegramReport := fmt.Sprintf("%s, Timestamp: %s", report, time.Now().Format("2006/01/02 15:04:05.000"))
+		telegramReport := fmt.Sprintf("%s, Timestamp: %s", report, time.Now().Round(time.Millisecond))
 		tg.SendMessage = telegramReport
 		_, _ = tg.Bot.Send(tgBot.NewMessage(su.Telegram.ChatID, telegramReport))
 	}
@@ -78,10 +78,11 @@ func daemonRun() {
 		resp, err := http.Get("https://www.netflix.com/title/70143836")
 		if err != nil {
 			log.Errorln(err.Error())
-		}
-		err = resp.Body.Close()
-		if err != nil {
-			log.Errorln(err.Error())
+		} else {
+			err = resp.Body.Close()
+			if err != nil {
+				log.Errorln(err.Error())
+			}
 		}
 		if resp.StatusCode != 200 {
 			log.Errorln("Cannot access NETFLIX, Retesting all nodes.")

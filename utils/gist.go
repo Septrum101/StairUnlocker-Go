@@ -50,7 +50,7 @@ func Gist(data []byte, cfg *config.SuConfig) (err error) {
 		log.Infoln("Create gist success! Please visit: https://gist.github.com for details.")
 	} else if reqs.StatusCode == 404 {
 		ctx.cfg.GistUrl = ""
-		reqs, err := ctx.upload()
+		reqs, err = ctx.upload()
 		if err != nil {
 			return err
 		}
