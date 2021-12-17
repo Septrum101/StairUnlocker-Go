@@ -78,10 +78,11 @@ func daemonRun() {
 		resp, err := http.Get("https://www.netflix.com/title/70143836")
 		if err != nil {
 			log.Errorln(err.Error())
-		}
-		err = resp.Body.Close()
-		if err != nil {
-			log.Errorln(err.Error())
+		} else {
+			err = resp.Body.Close()
+			if err != nil {
+				log.Errorln(err.Error())
+			}
 		}
 		if resp.StatusCode != 200 {
 			log.Errorln("Cannot access NETFLIX, Retesting all nodes.")
