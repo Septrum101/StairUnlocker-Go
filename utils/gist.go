@@ -42,6 +42,9 @@ func (ths *gistCtx) create() {
 func Gist(data []byte, cfg *config.SuConfig) (err error) {
 	ctx := gistCtx{cfg, data, nil}
 	reqs, err := ctx.upload()
+	if err != nil {
+		log.Errorln(err.Error())
+	}
 	ctx.body = reqs.Body
 	if reqs.StatusCode == 200 {
 		log.Infoln("Update gist success! Please visit: https://gist.github.com for details.")

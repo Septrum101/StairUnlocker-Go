@@ -121,6 +121,7 @@ func convertAPI(sCfg *SuConfig) (p []byte) {
 	params.Add("target", "clash")
 	params.Add("list", "true")
 	params.Add("url", sCfg.SubURL)
+	params.Add("append_type", "true")
 	baseUrl.RawQuery = params.Encode()
 	reqs, err := http.Get(baseUrl.String())
 	if err != nil {
