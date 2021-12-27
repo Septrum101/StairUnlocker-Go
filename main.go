@@ -83,21 +83,21 @@ func daemonRun() {
 			if err != nil {
 				log.Errorln(err.Error())
 			}
-		}
-		if resp.StatusCode != 200 {
-			log.Errorln("Cannot access NETFLIX, Retesting all nodes.")
-			// 清空 proxiesList 切片
-			start = time.Now()
-			proxiesList = proxiesList[:0]
-			run()
-		} else {
-			log.Infoln("Stream Media is unlocking.")
-			// 每6小时强制更新
-			if time.Now().Sub(start) > 6*time.Hour {
-				log.Infoln("Force re-testing all nodes.")
+			if resp.StatusCode > 299 {
+				log.Errorln("Cannot access NETFLIX, Retesting all nodes.")
+				// 清空 proxiesList 切片
 				start = time.Now()
 				proxiesList = proxiesList[:0]
 				run()
+			} else {
+				log.Infoln("Stream Media is unlocking.")
+				// 每6小时强制更新
+				if time.Now().Sub(start) > 6*time.Hour {
+					log.Infoln("Force re-testing all nodes.")
+					start = time.Now()
+					proxiesList = proxiesList[:0]
+					run()
+				}
 			}
 		}
 		time.Sleep(time.Duration(su.Internal) * time.Second)

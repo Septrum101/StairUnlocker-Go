@@ -44,6 +44,7 @@ func Gist(data []byte, cfg *config.SuConfig) (err error) {
 	reqs, err := ctx.upload()
 	if err != nil {
 		log.Errorln(err.Error())
+		return err
 	}
 	ctx.body = reqs.Body
 	if reqs.StatusCode == 200 {
