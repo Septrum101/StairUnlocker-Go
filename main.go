@@ -51,7 +51,11 @@ func run() {
 	}
 	start = time.Now()
 	netflixList := utils.BatchCheck(proxiesList, connNum)
-	report := fmt.Sprintf("Total %d nodes test completed, %d unlock nodes, Elapsed time: %s", len(proxiesList), len(netflixList), time.Now().Sub(start).Round(time.Millisecond))
+	if len(netflixList) == 0 {
+		log.Warnln("No unlock node were found.")
+		return
+	}
+	report := fmt.Sprintf("Total %d nodes test completed, %d unlock nodes, Elapsed time: %s", len(proxiesList), len(netflixList), time.Since(start).Round(time.Millisecond))
 	log.Warnln(report)
 	if daemon && su.EnableTelegram {
 		telegramReport := fmt.Sprintf("%s, Timestamp: %s", report, time.Now().Round(time.Millisecond))
@@ -141,19 +145,21 @@ func main() {
 	if daemon {
 		ch := make(chan bool, 1)
 		if su.EnableTelegram {
-			go func() { tg.TelegramUpdates(&ch) }()
+			go tg.TelegramUpdates(&ch)
+			go func() {
+				for check := range ch {
+					if check {
+						log.Infoln("Telegram: Force re-testing all nodes.")
+						start = time.Now()
+						proxiesList = proxiesList[:0]
+						run()
+						tg.Check = false
+					}
+				}
+			}()
 		} else {
 			close(ch)
 		}
-		go func() { daemonRun() }()
-		for check := range ch {
-			if check {
-				log.Infoln("Telegram: Force re-testing all nodes.")
-				start = time.Now()
-				proxiesList = proxiesList[:0]
-				run()
-				tg.Check = false
-			}
-		}
+		daemonRun()
 	}
 }

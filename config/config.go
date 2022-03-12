@@ -2,17 +2,17 @@ package config
 
 import (
 	"fmt"
-	"github.com/Dreamacro/clash/adapter"
-	C "github.com/Dreamacro/clash/constant"
-	"github.com/Dreamacro/clash/log"
 	"gopkg.in/yaml.v3"
-	"io"
 	"io/ioutil"
-	"net/http"
 	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/Dreamacro/clash/adapter"
+	C "github.com/Dreamacro/clash/constant"
+	"github.com/Dreamacro/clash/log"
+	"github.com/go-resty/resty/v2"
 )
 
 type RawConfig struct {
@@ -80,9 +80,8 @@ func UnmarshalRawConfig(buf []byte) (*RawConfig, error) {
 
 func parseProxies(cfg *RawConfig) (proxies map[string]C.Proxy, err error) {
 	proxies = make(map[string]C.Proxy)
-	proxiesConfig := cfg.Proxy
 
-	for idx, mapping := range proxiesConfig {
+	for idx, mapping := range cfg.Proxy {
 		proxy, err := adapter.ParseProxy(mapping)
 		if err != nil {
 			return nil, fmt.Errorf("proxy %d: %w", idx, err)
@@ -120,21 +119,17 @@ func convertAPI(sCfg *SuConfig) (p []byte) {
 	params := url.Values{}
 	params.Add("target", "clash")
 	params.Add("list", "true")
-	params.Add("url", sCfg.SubURL)
 	params.Add("append_type", "true")
+	params.Add("emoji", "false")
+	params.Add("url", sCfg.SubURL)
 	baseUrl.RawQuery = params.Encode()
-	reqs, err := http.Get(baseUrl.String())
+	resp, err := resty.New().SetHeader("User-Agent", "ClashforWindows/0.19.11").
+		R().Get(baseUrl.String())
 	if err != nil {
 		log.Errorln(err.Error())
 	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			return
-		}
-	}(reqs.Body)
-	p, _ = ioutil.ReadAll(reqs.Body)
-	if strings.Contains(string(p), "The following link doesn't contain any valid node info") {
+	p = resp.Body()
+	if strings.Contains(resp.String(), "The following link doesn't contain any valid node info") {
 		log.Errorln("The following link doesn't contain any valid node info.")
 		panic("Invalid link.")
 	}
