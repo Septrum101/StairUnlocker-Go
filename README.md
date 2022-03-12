@@ -70,13 +70,13 @@ telegram:
 - 单次运行:
 
 ~~~~bash
-./main
+./StairUnlocker-Go
 ~~~~
 
 - 服务模式:
 
 ~~~~bash
-./main -D
+./StairUnlocker-Go -D
 ~~~~
 
 4. 命令参数：
